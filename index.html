@@ -51,7 +51,7 @@
            oninput="updateScale(this.value, 'right')">
     <span id="scaleValue-right">1x</span>
   </div><br>
-  <div style="margin: 15px 0">
+  <div style="margin: 10px 0">
     Adaptability right: 
     <input type="range" 
            id="sizeSlider" 
@@ -73,18 +73,6 @@
            oninput="updateScale(this.value, 'bottom')">
     <span id="scaleValue-bottom">1x</span>
   </div><br>
-  <div style="margin: 15px 0">
-    Adaptability bottom: 
-    <input type="range" 
-           id="sizeSlider" 
-           min="0.5" 
-           max="3" 
-           step="0.1" 
-           value="1"
-           oninput="updateScale(this.value, 'adaptB')">
-    <span id="scaleValue-adaptB">1x</span>
-  </div>
-  <br>
   <textarea id="testArea" placeholder="Tapez ici pour tester la police..." disabled></textarea>
 
   <script>
@@ -144,8 +132,8 @@
     .mibmp-font {
       transform: scale(var(--mifont-size));
       /*transform-origin: left bottom;*/
-      margin-right: calc(-(--mifont-right)em * 1/(--mifont-adaptR)*var(--mifont-size)); /* Ajustement dynamique des marges */
-      margin-bottom: calc(-(--mifont-bottom)em * (--mifont-adaptB)*var(--mifont-size));
+      margin-right: calc(-1em * var(--mifont-right) * 1/(var(--mifont-adaptR)*var(--mifont-size))); /* Ajustement dynamique des marges */
+      margin-bottom: calc(-1em * var(--mifont-bottom) * var(--mifont-size));
       display: inline-block;
       background-image: url('${pngDataURL}');
       image-rendering: pixelated;
