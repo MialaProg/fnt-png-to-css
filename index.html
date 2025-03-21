@@ -164,11 +164,15 @@
     }
 
     function downloadJS() {
-      // const blob = new Blob([generatedCSS], { type: 'text/css' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL("./mifont.js");
-      link.download = 'mifont.js';
-      link.click();
+      fetch('./mifont.js')
+      .then(response => response.blob())
+      .then(blob => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'mifont.js';
+        link.click();
+      })
+      .catch(error => console.error('Error fetching the JS file:', error));
     }
 
     document.getElementById('testArea').addEventListener('input', function(e) {
