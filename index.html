@@ -3,24 +3,14 @@
 <head>
   <title>Générateur de Police Bitmap</title>
   <style>
-    :root {
-      --scale-factor: 1; /* Variable CSS pour le contrôle de l'échelle */
-    }
+    
 
     #testArea {
       margin-top: 20px;
       border: 1px solid #ccc;
       padding: 10px;
       font-size: 24px;
-    }
-
-    /* Nouveaux styles pour le redimensionnement */
-    .bitmap-font {
-      transform: scale(var(--scale-factor));
-      transform-origin: left bottom;
-      margin-right: calc(-4em * var(--scale-factor)); /* Ajustement dynamique des marges */
-      margin-bottom: calc(-5em * var(--scale-factor));
-    }
+    }    
 
     /* Options de taille prédéfinies */
     .size-option {
@@ -36,7 +26,7 @@
   .fnt : <input type="file" id="fntFile" accept=".fnt" /><br>
   .png : <input type="file" id="pngFile" accept=".png" /><br>
   <button onclick="generateWebFont()">Générer la police</button><br>
-  <button onclick="downloadCSS()" id="downloadBtn" disabled>Télécharger CSS</button>
+  <button onclick="downloadCSS()" id="downloadBtn" disabled>Télécharger CSS</button><br>
   
   <!-- Ajout du curseur de taille -->
   <div style="margin: 15px 0">
@@ -50,13 +40,13 @@
            oninput="updateScale(this.value)">
     <span id="scaleValue">1x</span>
   </div>
-
+  <br>
   <textarea id="testArea" placeholder="Tapez ici pour tester la police..." disabled></textarea>
 
   <script>
     // Nouvelle fonction pour gérer le redimensionnement
     function updateScale(value) {
-      document.documentElement.style.setProperty('--scale-factor', value);
+      document.documentElement.style.setProperty('--mifont-size', value);
       document.getElementById('scaleValue').textContent = value + 'x';
     }
 
@@ -100,11 +90,18 @@
     }
 
     function injectCSS(chars, pngDataURL) {
-      let css = `.bitmap-font {
-  display: inline-block;
-  background-image: url('${pngDataURL}');
-  image-rendering: pixelated;
-  vertical-align: bottom;
+      let css = `:root {
+      --mifont-size: 1; /* Variable CSS pour le contrôle de l'échelle */
+    }
+    .mibmp-font {
+      transform: scale(var(--mifont-size));
+      transform-origin: left bottom;
+      margin-right: calc(-4em * var(--mifont-size)); /* Ajustement dynamique des marges */
+      margin-bottom: calc(-5em * var(--mifont-size));
+      display: inline-block;
+      background-image: url('${pngDataURL}');
+      image-rendering: pixelated;
+      vertical-align: bottom;
 }\n\n`;
 
       chars.forEach(char => {
@@ -118,11 +115,40 @@
       const style = document.createElement('style');
       style.textContent = css;
       document.head.appendChild(style);
-      generatedCSS = css;
+      generatedCSS = css; // Stocke le CSS pour le téléchargement
     }
 
-    // Le reste des fonctions reste inchangé...
-    // ... (downloadCSS, event listener, readFileAsDataURL)
+    function downloadCSS() {
+      const blob = new Blob([generatedCSS], { type: 'text/css' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'miala-bitmap-font.css';
+      link.click();
+    }
+
+    document.getElementById('testArea').addEventListener('input', function(e) {
+      const text = e.target.value;
+      const output = text.split('').map(c => {
+        const code = c.charCodeAt(0);
+        const char = currentChars.find(ch => ch.id === code);
+        return char ? `<span class="mibmp-font char-${code}"></span>` : `<span class="mibmp-font">`;
+      }).join('');
+
+      const preview = document.getElementById('preview') || document.createElement('div');
+      preview.id = 'preview';
+      preview.innerHTML = output;
+      if (!document.getElementById('preview')) {
+        e.target.insertAdjacentElement('afterend', preview);
+      }
+    });
+
+    function readFileAsDataURL(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
+    }
   </script>
 </body>
 </html>
