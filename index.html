@@ -95,8 +95,8 @@
     }
     .mibmp-font {
       transform: scale(var(--mifont-size));
-      transform-origin: left bottom;
-      margin-right: calc(-4em * var(--mifont-size)); /* Ajustement dynamique des marges */
+      /*transform-origin: left bottom;*/
+      margin-right: calc(-4.5em * 1/var(--mifont-size)); /* Ajustement dynamique des marges */
       margin-bottom: calc(-5em * var(--mifont-size));
       display: inline-block;
       background-image: url('${pngDataURL}');
@@ -129,9 +129,12 @@
     document.getElementById('testArea').addEventListener('input', function(e) {
       const text = e.target.value;
       const output = text.split('').map(c => {
+        if (c=="\n"){
+          return "<br>";
+        }
         const code = c.charCodeAt(0);
         const char = currentChars.find(ch => ch.id === code);
-        return char ? `<span class="mibmp-font char-${code}"></span>` : `<span class="mibmp-font">`;
+        return char ? `<span class="mibmp-font char-${code}"></span>` : `<span class="mibmp-font"></span>`;
       }).join('');
 
       const preview = document.getElementById('preview') || document.createElement('div');
