@@ -28,9 +28,8 @@
   <button onclick="generateWebFont()">Générer la police</button><br>
   <button onclick="downloadCSS()" id="downloadBtn" disabled>Télécharger CSS</button><br>
   
-  <!-- Ajout du curseur de taille -->
-  <div style="margin: 15px 0">
-    Taille: 
+  <div style="margin: 5px 0">
+    --mifont-size:
     <input type="range" 
            id="sizeSlider" 
            min="0.5" 
@@ -40,8 +39,8 @@
            oninput="updateScale(this.value, 'size')">
     <span id="scaleValue-size">1x</span>
   </div><br>
-  <div style="margin: 15px 0">
-    Margin right: 
+  <div style="margin: 5px 0">
+    --mifont-right: 
     <input type="range" 
            id="sizeSlider" 
            min="0.5" 
@@ -51,8 +50,8 @@
            oninput="updateScale(this.value, 'right')">
     <span id="scaleValue-right">1x</span>
   </div><br>
-  <div style="margin: 10px 0">
-    Adaptability right: 
+  <div style="margin: 5px 0">
+    --mifont-adaptR:
     <input type="range" 
            id="sizeSlider" 
            min="0.5" 
@@ -63,7 +62,7 @@
     <span id="scaleValue-adaptR">1x</span>
   </div><br>
   <div style="margin: 15px 0">
-    Margin bottom: 
+    --mifont-bottom: 
     <input type="range" 
            id="sizeSlider" 
            min="0.5" 
@@ -79,7 +78,7 @@
     // Nouvelle fonction pour gérer le redimensionnement
     function updateScale(value,prop) {
       document.documentElement.style.setProperty('--mifont-'+prop, value);
-      document.getElementById('scaleValue-'+prop).textContent = value + 'x';
+      document.getElementById('scaleValue-'+prop).textContent = value + ';';
     }
 
     // Le reste du script reste inchangé...
@@ -123,8 +122,8 @@
 
     function injectCSS(chars, pngDataURL) {
       let css = `:root {
-      --mifont-size: 1; /* Variable CSS pour le contrôle de l'échelle */
-      --mifont-adaptB: 1;
+      /* Variable CSS pour le contrôle de l'échelle */
+      --mifont-size: 1; 
       --mifont-adaptR: 1;
       --mifont-right: 4.5;
       --mifont-bottom: 5;
@@ -170,7 +169,7 @@
         }
         const code = c.charCodeAt(0);
         const char = currentChars.find(ch => ch.id === code);
-        return char ? `<span class="mibmp-font char-${code}"></span>` : `<span class="mibmp-font"></span>`;
+        return char ? `<span class="mibmp-font char-${code}"></span>` : `&emsp`;
       }).join('');
 
       const preview = document.getElementById('preview') || document.createElement('div');
