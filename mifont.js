@@ -4,8 +4,8 @@ function setMiFontProp(prop, value) {
 }
 
 function miFontToConvert(obj){
-    preview.classList.add('mifont');
-    preview.classList.remove('mifont');
+    obj.classList.add('mifont');
+    obj.classList.remove('mifont');
 }
 
 
