@@ -169,7 +169,7 @@
         }
         const code = c.charCodeAt(0);
         const char = currentChars.find(ch => ch.id === code);
-        return char ? `<span class="mibmp-font char-${code}"></span>` : `&emsp`;
+        return char ? `<span class="mibmp-font char-${code}"></span>` : `<span style="margin-right: calc(1em*var(--mifont-right));"></span>`;
       }).join('');
 
       const preview = document.getElementById('preview') || document.createElement('div');
