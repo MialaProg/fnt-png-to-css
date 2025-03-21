@@ -37,17 +37,61 @@
            max="3" 
            step="0.1" 
            value="1"
-           oninput="updateScale(this.value)">
-    <span id="scaleValue">1x</span>
+           oninput="updateScale(this.value, 'size')">
+    <span id="scaleValue-size">1x</span>
+  </div><br>
+  <div style="margin: 15px 0">
+    Margin right: 
+    <input type="range" 
+           id="sizeSlider" 
+           min="0.5" 
+           max="10" 
+           step="0.1" 
+           value="1"
+           oninput="updateScale(this.value, 'right')">
+    <span id="scaleValue-right">1x</span>
+  </div><br>
+  <div style="margin: 15px 0">
+    Adaptability right: 
+    <input type="range" 
+           id="sizeSlider" 
+           min="0.5" 
+           max="3" 
+           step="0.1" 
+           value="1"
+           oninput="updateScale(this.value, 'adaptR')">
+    <span id="scaleValue-adaptR">1x</span>
+  </div><br>
+  <div style="margin: 15px 0">
+    Margin bottom: 
+    <input type="range" 
+           id="sizeSlider" 
+           min="0.5" 
+           max="10" 
+           step="0.1" 
+           value="1"
+           oninput="updateScale(this.value, 'bottom')">
+    <span id="scaleValue-bottom">1x</span>
+  </div><br>
+  <div style="margin: 15px 0">
+    Adaptability bottom: 
+    <input type="range" 
+           id="sizeSlider" 
+           min="0.5" 
+           max="3" 
+           step="0.1" 
+           value="1"
+           oninput="updateScale(this.value, 'adaptB')">
+    <span id="scaleValue-adaptB">1x</span>
   </div>
   <br>
   <textarea id="testArea" placeholder="Tapez ici pour tester la police..." disabled></textarea>
 
   <script>
     // Nouvelle fonction pour gérer le redimensionnement
-    function updateScale(value) {
-      document.documentElement.style.setProperty('--mifont-size', value);
-      document.getElementById('scaleValue').textContent = value + 'x';
+    function updateScale(value,prop) {
+      document.documentElement.style.setProperty('--mifont-'+prop, value);
+      document.getElementById('scaleValue-'+prop).textContent = value + 'x';
     }
 
     // Le reste du script reste inchangé...
@@ -92,12 +136,16 @@
     function injectCSS(chars, pngDataURL) {
       let css = `:root {
       --mifont-size: 1; /* Variable CSS pour le contrôle de l'échelle */
+      --mifont-adaptB: 1;
+      --mifont-adaptR: 1;
+      --mifont-right: 4.5;
+      --mifont-bottom: 5;
     }
     .mibmp-font {
       transform: scale(var(--mifont-size));
       /*transform-origin: left bottom;*/
-      margin-right: calc(-4.5em * 1/var(--mifont-size)); /* Ajustement dynamique des marges */
-      margin-bottom: calc(-5em * var(--mifont-size));
+      margin-right: calc(-(--mifont-right)em * 1/(--mifont-adaptR)*var(--mifont-size)); /* Ajustement dynamique des marges */
+      margin-bottom: calc(-(--mifont-bottom)em * (--mifont-adaptB)*var(--mifont-size));
       display: inline-block;
       background-image: url('${pngDataURL}');
       image-rendering: pixelated;
