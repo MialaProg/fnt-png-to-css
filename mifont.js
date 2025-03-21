@@ -5,7 +5,7 @@ function setMiFontProp(prop, value) {
 
 function miFontToConvert(obj){
     obj.classList.add('mifont');
-    obj.classList.remove('mifont');
+    obj.classList.remove('convertedIntoMialaFont');
 }
 
 
