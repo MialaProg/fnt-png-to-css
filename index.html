@@ -9,19 +9,19 @@
       padding: 10px;
       font-size: 24px;
     }
-    /* Réduction de l'espacement entre les caractères */
+    /* Réduction de l'espacement entre les caractères 
     #preview {
       word-spacing: -0.5em; /* Ajustement global */
-    }
+    }*/
     .bitmap-font {
-      margin-right: -4em; /* Ajustement fin par caractère */
-      margin-bottom: -5em;
+      margin-left: -4em;
+      margin-top: -5em;
     }
   </style>
 </head>
 <body>
-  <input type="file" id="fntFile" accept=".fnt" />
-  <input type="file" id="pngFile" accept=".png" />
+  .fnt : <input type="file" id="fntFile" accept=".fnt" />
+  .png : <input type="file" id="pngFile" accept=".png" />
   <button onclick="generateWebFont()">Générer la police</button>
   <button onclick="downloadCSS()" id="downloadBtn" disabled>Télécharger CSS</button>
   <br/>
@@ -72,7 +72,9 @@
   background-image: url('${pngDataURL}');
   image-rendering: pixelated;
   vertical-align: bottom;
-  /*margin-right: -0.3em;  Espacement réduit */
+  margin-left: -4em;
+  margin-top: -5em;
+    
 }\n\n`;
 
       chars.forEach(char => {
@@ -93,7 +95,7 @@
       const blob = new Blob([generatedCSS], { type: 'text/css' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = 'bitmap-font.css';
+      link.download = 'miala-bitmap-font.css';
       link.click();
     }
 
