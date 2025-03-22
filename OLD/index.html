@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Générateur de Police Bitmap</title>
+  <style>
+    
+
+    #testArea {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      font-size: 24px;
+    }    
+
+    /* Options de taille prédéfinies */
+    .size-option {
+      display: inline-block;
+      padding: 5px;
+      margin: 5px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+    }
+  </style>
+  <script src="mifont.js"></script>
+</head>
+<body>
+  .fnt : <input type="file" id="fntFile" accept=".fnt" /><br>
+  .png : <input type="file" id="pngFile" accept=".png" /><br>
+  <button onclick="generateWebFont()">Générer la police</button><br>
+  <button onclick="downloadCSS()" id="downloadBtn" disabled>Télécharger CSS</button><br>
+  <button onclick="downloadJS()">Télécharger JS</button><br>
+  
+  <div style="margin: 5px 0">
+    --mifont-size:
+    <input type="range" 
+           id="sizeSlider" 
+           min="0.5" 
+           max="3" 
+           step="0.1" 
+           value="1"
+           oninput="updateScale(this.value, 'size')">
+    <span id="scaleValue-size">1x</span>
+  </div><br>
+  <div style="margin: 5px 0">
+    --mifont-right: 
+    <input type="range" 
+           id="sizeSlider" 
+           min="0.5" 
+           max="10" 
+           step="0.1" 
+           value="1"
+           oninput="updateScale(this.value, 'right')">
+    <span id="scaleValue-right">1x</span>
+  </div><br>
+  <div style="margin: 5px 0">
+    --mifont-adaptR:
+    <input type="range" 
+           id="sizeSlider" 
+           min="0.5" 
+           max="3" 
+           step="0.1" 
+           value="1"
+           oninput="updateScale(this.value, 'adaptR')">
+    <span id="scaleValue-adaptR">1x</span>
+  </div><br>
+  <div style="margin: 15px 0">
+    --mifont-bottom: 
+    <input type="range" 
+           id="sizeSlider" 
+           min="0.5" 
+           max="10" 
+           step="0.1" 
+           value="1"
+           oninput="updateScale(this.value, 'bottom')">
+    <span id="scaleValue-bottom">1x</span>
+  </div><br>
+  <textarea id="testArea" placeholder="Tapez ici pour tester la police..." disabled></textarea>
+
+  <script>
+    // Nouvelle fonction pour gérer le redimensionnement
+    function updateScale(value,prop) {
+      document.documentElement.style.setProperty('--mifont-'+prop, value);
+      document.getElementById('scaleValue-'+prop).textContent = value + ';';
+    }
+
+    // Le reste du script reste inchangé...
+    let currentChars = [];
+    let generatedCSS = '';
+
+    async function generateWebFont() {
+      const fntFile = document.getElementById('fntFile').files[0];
+      const pngFile = document.getElementById('pngFile').files[0];
+
+      if (!fntFile || !pngFile) {
+        alert("Veuillez sélectionner les deux fichiers !");
+        return;
+      }
+
+      const fntText = await fntFile.text();
+      currentChars = parseFNT(fntText);
+      const pngDataURL = await readFileAsDataURL(pngFile);
+
+      injectCSS(currentChars, pngDataURL);
+      document.getElementById('downloadBtn').disabled = false;
+      document.getElementById('testArea').disabled = false;
+    }
+
+    function parseFNT(fntText) {
+      const chars = [];
+      const lines = fntText.split("\n");
+
+      for (const line of lines) {
+        if (line.startsWith("char ")) {
+          const parts = line.split(/\s+/).reduce((acc, part) => {
+            const [key, val] = part.split("=");
+            if (val) acc[key] = parseInt(val);
+            return acc;
+          }, {});
+          chars.push(parts);
+        }
+      }
+      return chars;
+    }
+
+    function injectCSS(chars, pngDataURL) {
+      let css = `:root {
+      /* Variable CSS pour le contrôle de l'échelle */
+      --mifont-size: 1; 
+      --mifont-adaptR: 1;
+      --mifont-right: 4.5;
+      --mifont-bottom: 5;
+    }
+    .mibmp-font {
+      transform: scale(var(--mifont-size));
+      /*transform-origin: left bottom;*/
+      margin-right: calc(-1em * var(--mifont-right) * 1/(var(--mifont-adaptR)*var(--mifont-size))); /* Ajustement dynamique des marges */
+      margin-bottom: calc(-1em * var(--mifont-bottom) * var(--mifont-size));
+      display: inline-block;
+      background-image: url('${pngDataURL}');
+      image-rendering: pixelated;
+      vertical-align: bottom;
+}\n\n`;
+
+      chars.forEach(char => {
+        css += `.char-${char.id} {
+  width: ${char.width}px;
+  height: ${char.height}px;
+  background-position: -${char.x}px -${char.y}px;
+}\n`;
+      });
+
+      const style = document.createElement('style');
+      style.textContent = css;
+      document.head.appendChild(style);
+      generatedCSS = css; // Stocke le CSS pour le téléchargement
+    }
+
+    function downloadCSS() {
+      const blob = new Blob([generatedCSS], { type: 'text/css' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'miala-bitmap-font.css';
+      link.click();
+    }
+
+    function downloadJS() {
+      fetch('./mifont.js')
+      .then(response => response.blob())
+      .then(blob => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'mifont.js';
+        link.click();
+      })
+      .catch(error => console.error('Error fetching the JS file:', error));
+    }
+
+    document.getElementById('testArea').addEventListener('input', function(e) {
+      const text = e.target.value;
+      // const output = text.split('').map(c => {
+      //   if (c=="\n"){
+      //     return "<br>";
+      //   }
+      //   const code = c.charCodeAt(0);
+      //   const char = currentChars.find(ch => ch.id === code);
+      //   return char ? `<span class="mibmp-font char-${code}"></span>` : `<span style="margin-right: calc(1em*var(--mifont-right));"></span>`;
+      // }).join('');
+
+      // const preview = document.getElementById('preview') || document.createElement('div');
+      // preview.id = 'preview';
+      // preview.innerHTML = output;
+      // if (!document.getElementById('preview')) {
+      //   e.target.insertAdjacentElement('afterend', preview);
+      // }
+      const preview = document.getElementById('preview') || document.createElement('div');
+      preview.id = 'preview';
+      miFontToConvert(preview);
+      preview.innerHTML = text;
+      if (!document.getElementById('preview')) {
+        e.target.insertAdjacentElement('afterend', preview);
+      }
+      convertMiFonts();
+    });
+
+    function readFileAsDataURL(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
+    }
+  </script>
+</body>
+</html>
