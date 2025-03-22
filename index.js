@@ -3,9 +3,12 @@ var currentChars = undefined;
 var pngDataURL = undefined;
 
 function disableLoop(element, disabled) {
-    element.setAttribute('disabled', disabled);
-    element.childNodes.forEach(child => disableLoop(child, disabled));
-    
+    try {
+        element.setAttribute('disabled', disabled);
+        element.childNodes.forEach(child => disableLoop(child, disabled));
+    } catch (error) {
+        }
+       
 }
 
 function disable(what = [1, 1, 1]) {
