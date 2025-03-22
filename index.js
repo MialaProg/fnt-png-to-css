@@ -4,12 +4,17 @@ var pngDataURL = undefined;
 
 function disableLoop(element, disabled) {
     try {
-        element.setAttribute('disabled', Boolean(disabled));
+        if (disabled) {
+            element.setAttribute('disabled', true);
+        } else {
+            element.removeAttribute('disabled');
+        }
+
         element.childNodes.forEach(child => disableLoop(child, disabled));
     } catch (error) {
-        }
-    
-       
+    }
+
+
 }
 
 function disable(what = [1, 1, 1]) {
