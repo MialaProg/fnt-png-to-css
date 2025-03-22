@@ -4,10 +4,11 @@ var pngDataURL = undefined;
 
 function disableLoop(element, disabled) {
     try {
-        element.setAttribute('disabled', disabled);
+        element.setAttribute('disabled', Boolean(disabled));
         element.childNodes.forEach(child => disableLoop(child, disabled));
     } catch (error) {
         }
+    
        
 }
 
