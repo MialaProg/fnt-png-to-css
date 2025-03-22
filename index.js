@@ -2,10 +2,16 @@ var generatedCSS = undefined;
 var currentChars = undefined;
 var pngDataURL = undefined;
 
+function disableLoop(element, disabled) {
+    element.setAttribute('disabled', disabled);
+    element.childNodes.forEach(child => disableLoop(child, disabled));
+    
+}
+
 function disable(what = [1, 1, 1]) {
     for (let index = 0; index < 3; index++) {
         const element = document.getElementById('step' + (index + 1));
-        element.setAttribute('disabled', what[index]);
+        disableLoop(element, what[index])
     }
 }
 
@@ -154,7 +160,8 @@ function rangeUpdate(prop, val) {
 
 function createRanges() {
     const ranges = document.getElementsByClassName("range");
-    ranges.forEach(range => {
+    for (let index = 0; index < ranges.length; index++) {
+        const range = ranges[index];
         let prop = range.getAttribute('prop');
         let max = range.getAttribute('max');
         let val = range.getAttribute('value');
@@ -170,7 +177,7 @@ function createRanges() {
         <span id="scaleValue-${prop}">1x</span>
         `;
         range.classList.remove("range")
-    });
+    };
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
