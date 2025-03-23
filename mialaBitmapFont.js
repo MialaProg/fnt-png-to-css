@@ -5,25 +5,50 @@ function setMiFontProp(prop, value) {
 
 // Get properties of the MiFont as size, right, adaptR and bottom
 function getMiFontProp(prop, element = document.documentElement) {
-    return element.style.getPropertyValue('--mifont-' + prop);
+    while (element) {
+        const value = element.style.getPropertyValue('--mifont-' + prop);
+        if (value) {
+            return value;
+        }
+        element = element.parentElement;
+    }
+    return null;
 }
 
-function textToMiFont(text) {
+var lengthMiFont = 0;
+function textToMiFont(text, width=1, maxW=window.innerWidth) {
+    lengthMiFont = 0;
     return text.split('').map(c => {
         if (c == "\n") {
             return "<br>";
         }
         const code = c.charCodeAt(0);
-        const char = currentChars.find(ch => ch.id === code);
-        return char ? `<span class="mibmp-font char-${code}"></span>` : `<span class="mifont-nochar">${c}</span>`;
+        let char = currentChars.find(ch => ch.id === code);
+        char = char ? `<span class="mibmp-font char-${code}"></span>` : `<span class="mifont-nochar">${c}</span>`;
+
+        lengthMiFont += width;
+        if (lengthMiFont > maxW) {
+            lengthMiFont = 0;
+            return "<br>" + char;
+        }
+
+        return char;
     }).join('');
 }
 
 function convertMiFont(element, parent = undefined) {
 
     try {
+        const size = parseFloat(getMiFontProp('size', element));
+        let width = parseFloat(getMiFontProp('charWidth', element));
+        if (isNaN(width) || isNaN(size)) {
+            width = 1;
+        } else {
+            width *= size;
+        }
+
         if (element.nodeType === Node.TEXT_NODE) {
-            let txt = textToMiFont(element.nodeValue);
+            let txt = textToMiFont(element.nodeValue, width, parent.clientWidth);
             const div = document.createElement('div');
             div.innerHTML = txt;
             div.setAttribute('beforeMiFont', element.nodeValue);
