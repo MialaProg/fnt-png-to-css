@@ -19,19 +19,22 @@ function textToMiFont(text) {
     }).join('');
 }
 
-function convertMiFont(element) {
-    if (element.nodeType === Node.TEXT_NODE) {
-        try {
-            let txt = textToMiFont(element.textContent);
-            element.textContent = '';
-            element.innerHTML = txt + element.innerHTML;
-            element.setAttribute('beforeMiFont', txt);
+function convertMiFont(element, parent = undefined) {
 
-        } catch (error) {
-            console.log(element);
-            console.log(error);
+    try {
+        if (element.nodeType === Node.TEXT_NODE) {
+            let txt = textToMiFont(element.nodeValue);
+            const div = document.createElement('div');
+            div.innerHTML = txt;
+            div.setAttribute('beforeMiFont', element.nodeValue);
+
+            parent.replaceChild(div, element);
+
+        } else if (element.nodeType === Node.ELEMENT_NODE) {
+            element.childNodes.forEach(child => convertMiFont(child, element));
         }
-    } else {
-        element.childNodes.forEach(child => convertMiFont(child));
+    } catch (error) {
+        console.log(element);
+        console.log(error);
     }
 }
