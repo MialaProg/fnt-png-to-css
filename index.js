@@ -91,8 +91,8 @@ function generateCSS(chars, pngDataURL) {
     --mifont-size: ${size || 1};
     --mifont-right: ${right || 4.5};
     --mifont-bottom: ${bottom || 5};
-    --mifont-charWidth: ${charW || chars[0].width};
-    --mifont-charHeight: ${charH || chars[0].height};
+    --mifont-charWidth: calc(${charW || chars[0].width} * var(--mifont-size));
+    --mifont-charHeight: calc(${charH || chars[0].height} * var(--mifont-size));
   }
 
   /*.mifont-space {
@@ -100,10 +100,10 @@ function generateCSS(chars, pngDataURL) {
   }*/
 
   .mibmp-font {
-    transform: scale(var(--mifont-size));
-    /*transform-origin: left bottom;*/
+    /*transform: scale(var(--mifont-size));
+    transform-origin: left bottom;
     margin-right: calc(-1em * var(--mifont-right) * .1/var(--mifont-size));
-    margin-bottom: calc(-1em * var(--mifont-bottom) * 1.1/var(--mifont-size));
+    margin-bottom: calc(-1em * var(--mifont-bottom) * 1.1/var(--mifont-size));*/
     display: inline-block;
     background-image: url('${pngDataURL}');
     image-rendering: pixelated;
