@@ -21,11 +21,18 @@ function textToMiFont(text) {
 
 function convertMiFont(element) {
     if (element.nodeType === Node.TEXT_NODE) {
-        let txt = textToMiFont(element.textContent);
-        element.textContent = '';
-        element.innerHTML = txt + element.innerHTML;
-        element.setAttribute('beforeMiFont', txt);
-    } else {
+        try {
+            let txt = textToMiFont(element.textContent);
+            element.textContent = '';
+            element.innerHTML = txt + element.innerHTML;
+            element.setAttribute('beforeMiFont', txt);
+     
+            
+        } catch (error) {
+            console.log(element);
+            console.log(error);
+        }
+           } else {
         element.childNodes.forEach(child => convertMiFont(child));
     }
 }
