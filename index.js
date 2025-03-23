@@ -93,8 +93,8 @@ function generateCSS(chars, pngDataURL) {
     --mifont-bottom: ${bottom || 5};
     --mifont-charWidth: calc(${charW || chars[0].width});
     --mifont-charHeight: calc(${charH || chars[0].height});
-    --mifont-Width: calc(var(--mifont-charWidth) * var(--mifont-size));
-    --mifont-Height: calc(var(--mifont-charHeight) * var(--mifont-size));
+    --mifont-Width: calc(var(--mifont-charWidth) + var(--mifont-size));
+    --mifont-Height: calc(var(--mifont-charHeight) + var(--mifont-size));
   }
 
   /*.mifont-space {
@@ -102,6 +102,7 @@ function generateCSS(chars, pngDataURL) {
   }*/
 
   .mibmp-font {
+    background-color: black;
     transform: scale(var(--mifont-size));
     transform-origin: left bottom;
     /*margin-right: calc(-1em * var(--mifont-right) * .1/var(--mifont-size));
