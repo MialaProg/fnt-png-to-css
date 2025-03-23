@@ -218,7 +218,10 @@ function createRanges() {
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
+    setInterval(() => {
     createRanges();
+    }, 1000);
+    
     step1();
 
     document.getElementById('testArea').addEventListener('input', function (e) {
