@@ -26,13 +26,12 @@ function convertMiFont(element) {
             element.textContent = '';
             element.innerHTML = txt + element.innerHTML;
             element.setAttribute('beforeMiFont', txt);
-     
-            
+
         } catch (error) {
             console.log(element);
             console.log(error);
         }
-           } else {
+    } else {
         element.childNodes.forEach(child => convertMiFont(child));
     }
 }
