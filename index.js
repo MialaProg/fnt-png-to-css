@@ -175,7 +175,7 @@ function downloadCSS() {
 }
 
 function downloadJS() {
-    fetch('./mifont.js')
+    fetch('./mialaBitmapFont.js')
         .then(response => response.blob())
         .then(blob => {
             const link = document.createElement('a');
