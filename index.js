@@ -102,7 +102,7 @@ function generateCSS(chars, pngDataURL) {
   .mibmp-font {
     transform: scale(var(--mifont-size));
     /*transform-origin: left bottom;*/
-    margin-right: calc(-1em * var(--mifont-right) * 1/var(--mifont-size));
+    margin-right: calc(-1em * var(--mifont-right) * .2/var(--mifont-size));
     margin-bottom: calc(-1em * var(--mifont-bottom) * var(--mifont-size));
     display: inline-block;
     background-image: url('${pngDataURL}');
@@ -142,10 +142,11 @@ background-position: calc(1px * (-${char.x} - ${char.width/2} + var(--mifont-cha
 
     charS.appendChild(charWidthRange);
     charS.appendChild(document.createElement('br'));
+    createRanges();
     charS.appendChild(charHeightRange);
     charS.appendChild(document.createElement('br'));
-
     createRanges();
+
 }
 
 
@@ -200,7 +201,7 @@ function createRanges() {
         --mifont-${prop}: 
         <input type="range" 
            id="${prop}Slider" 
-           min="0.5" 
+           min="0.1" 
            max="${max}" 
            step="0.1" 
            value="${val}"
