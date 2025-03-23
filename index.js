@@ -27,7 +27,7 @@ function disable(what = [1, 1, 1]) {
 function step1() {
     const del = document.getElementById("delMe")
     if (del) { del.remove(); }
-    document.getElementById("charS").innerHTML="";
+    document.getElementById("charS").innerHTML = "";
     disable([0, 1, 1]);
 }
 
@@ -114,7 +114,7 @@ function generateCSS(chars, pngDataURL) {
 
     chars.forEach(char => {
         css += `.mibmp-font.char-${char.id} {
-background-position: calc(1px * (-${char.x} - ${char.width/2} + var(--mifont-charWidth) / 2)) calc(1px * (-${char.y} - ${char.height/2} + var(--mifont-charHeight) / 2));
+background-position: calc(1px * (-${char.x} - ${char.width / 2} + var(--mifont-charWidth) / 2)) calc(1px * (-${char.y} - ${char.height / 2} + var(--mifont-charHeight) / 2));
 }\n`;
     });
 
@@ -142,11 +142,13 @@ background-position: calc(1px * (-${char.x} - ${char.width/2} + var(--mifont-cha
 
     charS.appendChild(charWidthRange);
     charS.appendChild(document.createElement('br'));
-    createRanges();
+
     charS.appendChild(charHeightRange);
     charS.appendChild(document.createElement('br'));
-    createRanges();
 
+    // setTimeout(() => {
+        createRanges();
+    // }, 500);
 }
 
 
@@ -190,6 +192,24 @@ function rangeUpdate(prop, val) {
     setMiFontProp(prop, val);
 }
 
+// function createRange(range) {
+//     let prop = range.getAttribute('prop');
+//     let max = range.getAttribute('max');
+//     let val = range.getAttribute('value');
+//     range.innerHTML = `
+//         --mifont-${prop}: 
+//         <input type="range" 
+//            id="${prop}Slider" 
+//            min="0.1" 
+//            max="${max}" 
+//            step="0.1" 
+//            value="${val}"
+//            oninput="rangeUpdate('${prop}',this.value)">
+//         <span id="scaleValue-${prop}">1x</span>
+//         `;
+//     range.classList.remove("range")
+// }
+
 function createRanges() {
     const ranges = document.getElementsByClassName("range");
     for (let index = 0; index < ranges.length; index++) {
@@ -208,7 +228,7 @@ function createRanges() {
            oninput="rangeUpdate('${prop}',this.value)">
         <span id="scaleValue-${prop}">1x</span>
         `;
-        range.classList.remove("range")
+        range.classList.remove("range");
     };
 }
 
