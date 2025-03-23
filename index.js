@@ -99,6 +99,10 @@ function generateCSS(chars, pngDataURL) {
     margin-right: calc(1em*var(--mifont-right));
   }*/
 
+ .mifont-nochar {
+  font-size: calc(.3px * var(--mifont-charHeight));
+}
+
   .mibmp-font {
     background-color: black;
     transform: scale(var(--mifont-size));
