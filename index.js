@@ -114,7 +114,7 @@ function generateCSS(chars, pngDataURL) {
 
     chars.forEach(char => {
         css += `.mibmp-font.char-${char.id} {
-background-position: -${char.x}px -${char.y}px;
+background-position: calc(1px * (-${char.x} - ${char.width/2} + var(--mifont-charWidth) / 2)) calc(1px * (-${char.y} - ${char.height/2} + var(--mifont-charHeight) / 2));
 }\n`;
     });
 
