@@ -90,8 +90,8 @@ function generateCSS(chars, pngDataURL) {
     --mifont-size: ${size || 1};
     --mifont-right: ${right || 4.5};
     --mifont-bottom: ${bottom || 5};
-    --mifont-charWidth: ${charW || char.width};
-    --mifont-charHeight: ${charH || char.height};
+    --mifont-charWidth: ${charW || chars[0].width};
+    --mifont-charHeight: ${charH || chars[0].height};
   }
 
   /*.mifont-space {
