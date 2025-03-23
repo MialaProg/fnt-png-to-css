@@ -21,8 +21,9 @@ function textToMiFont(text) {
 
 function convertMiFont(element) {
     if (element.nodeType === Node.TEXT_NODE) {
-        element.setAttribute('beforeMiFont', text);
-        element.textContent = textToMiFont(element.textContent);
+        let txt = textToMiFont(element.textContent);
+        element.textContent = txt;
+        element.setAttribute('beforeMiFont', txt);
     } else {
         element.childNodes.forEach(child => convertMiFont(child));
     }
