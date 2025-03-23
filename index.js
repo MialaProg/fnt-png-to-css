@@ -31,7 +31,7 @@ function step1() {
 }
 
 async function step2() {
-    disable([0, 0, 0]);
+    disable([1, 1, 1]);
 
     const fntFile = document.getElementById('fntFile').files[0];
     const pngFile = document.getElementById('pngFile').files[0];
@@ -48,7 +48,7 @@ async function step2() {
 
     generateCSS(currentChars, pngDataURL);
 
-    disable([0, 1, 0]);
+    disable([1, 0, 1]);
 }
 
 function parseFNT(fntText) {
@@ -130,11 +130,11 @@ background-position: -${char.x}px -${char.y}px;
 
 function step3() {
 
-    disable([0, 0, 0]);
+    disable([1, 1, 1]);
 
     generateCSS(currentChars, pngDataURL);
 
-    disable([0, 0, 1]);
+    disable([1, 1, 0]);
 
 }
 
