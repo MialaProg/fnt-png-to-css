@@ -27,6 +27,7 @@ function disable(what = [1, 1, 1]) {
 function step1() {
     const del = document.getElementById("delMe")
     if (del) { del.remove(); }
+    document.getElementById("charS").innerHTML="";
     disable([0, 1, 1]);
 }
 
@@ -107,12 +108,12 @@ function generateCSS(chars, pngDataURL) {
     background-image: url('${pngDataURL}');
     image-rendering: pixelated;
     vertical-align: bottom;
+    width: calc(1px * var(--mifont-charWidth));
+    height: calc(1px * var(--mifont-charHeight));
 }\n\n`;
 
     chars.forEach(char => {
         css += `.mibmp-font.char-${char.id} {
-width: var(--mifont-charWidth)px;
-height: var(--mifont-charHeight)px;
 background-position: -${char.x}px -${char.y}px;
 }\n`;
     });
@@ -124,6 +125,27 @@ background-position: -${char.x}px -${char.y}px;
         document.head.appendChild(style);
     }
     generatedCSS = css; // Stocke le CSS pour le téléchargement
+
+    // Create ranges for charWidth and charHeight
+    const charS = document.getElementById("charS");
+    const charWidthRange = document.createElement('div');
+    charWidthRange.className = 'range';
+    charWidthRange.setAttribute('max', chars[0].width);
+    charWidthRange.setAttribute('value', '5');
+    charWidthRange.setAttribute('prop', 'charWidth');
+
+    const charHeightRange = document.createElement('div');
+    charHeightRange.className = 'range';
+    charHeightRange.setAttribute('max', chars[0].height);
+    charHeightRange.setAttribute('value', '5');
+    charHeightRange.setAttribute('prop', 'charHeight');
+
+    charS.appendChild(charWidthRange);
+    charS.appendChild(document.createElement('br'));
+    charS.appendChild(charHeightRange);
+    charS.appendChild(document.createElement('br'));
+
+    createRanges();
 }
 
 
