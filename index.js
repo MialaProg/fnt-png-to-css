@@ -89,12 +89,10 @@ function generateCSS(chars, pngDataURL) {
     let css = `:root {
     /* Variable CSS pour le contrôle de l'échelle */
     --mifont-size: ${size || 1};
-    --mifont-right: ${right || 4.5};
-    --mifont-bottom: ${bottom || 5};
+    /*--mifont-right: ${right || 4.5};
+    --mifont-bottom: ${bottom || 5};*/
     --mifont-charWidth: calc(${charW || chars[0].width});
     --mifont-charHeight: calc(${charH || chars[0].height});
-    --mifont-Width: calc(var(--mifont-charWidth) + var(--mifont-size));
-    --mifont-Height: calc(var(--mifont-charHeight) + var(--mifont-size));
   }
 
   /*.mifont-space {
@@ -104,20 +102,22 @@ function generateCSS(chars, pngDataURL) {
   .mibmp-font {
     background-color: black;
     transform: scale(var(--mifont-size));
-    transform-origin: left bottom;
+    transform-origin: left top;
     /*margin-right: calc(-1em * var(--mifont-right) * .1/var(--mifont-size));
     margin-bottom: calc(-1em * var(--mifont-bottom) * 1.1/var(--mifont-size));*/
     display: inline-block;
     background-image: url('${pngDataURL}');
     image-rendering: pixelated;
     vertical-align: bottom;
-    width: calc(1px * var(--mifont-Width));
-    height: calc(1px * var(--mifont-Height));
+    width: calc(1px * var(--mifont-charWidth));
+    height: calc(1px * var(--mifont-charHeight));
+    margin-right: calc(-1px * var(--mifont-charWidth) * (1 - var(--mifont-size)));
+    margin-bottom: calc(-1px * var(--mifont-charHeight) * (1 - var(--mifont-size)));
 }\n\n`;
 
     chars.forEach(char => {
         css += `.mibmp-font.char-${char.id} {
-background-position: calc(1px * (-${char.x} - ${char.width / 2} + var(--mifont-Width) / 2)) calc(1px * (-${char.y} - ${char.height / 2} + var(--mifont-Height) / 2));
+background-position: calc(1px * (-${char.x} - ${char.width / 2} + var(--mifont-charWidth) / 2)) calc(1px * (-${char.y} - ${char.height / 2} + var(--mifont-charHeight) / 2));
 }\n`;
     });
 
