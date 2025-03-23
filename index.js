@@ -91,8 +91,10 @@ function generateCSS(chars, pngDataURL) {
     --mifont-size: ${size || 1};
     --mifont-right: ${right || 4.5};
     --mifont-bottom: ${bottom || 5};
-    --mifont-charWidth: calc(${charW || chars[0].width} * var(--mifont-size));
-    --mifont-charHeight: calc(${charH || chars[0].height} * var(--mifont-size));
+    --mifont-charWidth: calc(${charW || chars[0].width});
+    --mifont-charHeight: calc(${charH || chars[0].height});
+    --mifont-Width: calc(var(--mifont-charWidth) * var(--mifont-size));
+    --mifont-Height: calc(var(--mifont-charHeight) * var(--mifont-size));
   }
 
   /*.mifont-space {
@@ -108,13 +110,13 @@ function generateCSS(chars, pngDataURL) {
     background-image: url('${pngDataURL}');
     image-rendering: pixelated;
     vertical-align: bottom;
-    width: calc(1px * var(--mifont-charWidth));
-    height: calc(1px * var(--mifont-charHeight));
+    width: calc(1px * var(--mifont-Width));
+    height: calc(1px * var(--mifont-Height));
 }\n\n`;
 
     chars.forEach(char => {
         css += `.mibmp-font.char-${char.id} {
-background-position: calc(1px * (-${char.x} - ${char.width / 2} + var(--mifont-charWidth) / 2)) calc(1px * (-${char.y} - ${char.height / 2} + var(--mifont-charHeight) / 2));
+background-position: calc(1px * (-${char.x} - ${char.width / 2} + var(--mifont-Width) / 2)) calc(1px * (-${char.y} - ${char.height / 2} + var(--mifont-Height) / 2));
 }\n`;
     });
 
@@ -131,14 +133,14 @@ background-position: calc(1px * (-${char.x} - ${char.width / 2} + var(--mifont-c
     const charWidthRange = document.createElement('div');
     charWidthRange.className = 'range';
     charWidthRange.setAttribute('max', chars[0].width);
-    charWidthRange.setAttribute('value', '5');
+    charWidthRange.setAttribute('value', chars[0].width);
     charWidthRange.setAttribute('prop', 'charWidth');
     createRange(charWidthRange);
 
     const charHeightRange = document.createElement('div');
     charHeightRange.className = 'range';
     charHeightRange.setAttribute('max', chars[0].height);
-    charHeightRange.setAttribute('value', '5');
+    charHeightRange.setAttribute('value', chars[0].height);
     charHeightRange.setAttribute('prop', 'charHeight');
     createRange(charHeightRange);
 
@@ -204,7 +206,7 @@ function createRange(range) {
            step="0.1" 
            value="${val}"
            oninput="rangeUpdate('${prop}',this.value)">
-        <span id="scaleValue-${prop}">1x</span>
+        <span id="scaleValue-${prop}">${val}</span>
         `;
     range.classList.remove("range");
 }
