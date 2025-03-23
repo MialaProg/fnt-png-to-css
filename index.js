@@ -102,8 +102,8 @@ function generateCSS(chars, pngDataURL) {
   .mibmp-font {
     transform: scale(var(--mifont-size));
     /*transform-origin: left bottom;*/
-    margin-right: calc(-1em * var(--mifont-right) * .2/var(--mifont-size));
-    margin-bottom: calc(-1em * var(--mifont-bottom) * var(--mifont-size));
+    margin-right: calc(-1em * var(--mifont-right) * .1/var(--mifont-size));
+    margin-bottom: calc(-1em * var(--mifont-bottom) * 1.1/var(--mifont-size));
     display: inline-block;
     background-image: url('${pngDataURL}');
     image-rendering: pixelated;
