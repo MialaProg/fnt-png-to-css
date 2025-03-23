@@ -206,7 +206,7 @@ function createRange(range) {
            oninput="rangeUpdate('${prop}',this.value)">
         <span id="scaleValue-${prop}">1x</span>
         `;
-    range.classList.remove("range")
+    range.classList.remove("range");
 }
 
 function createRanges() {
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     setInterval(() => {
     createRanges();
     }, 1000);
-    
+
     step1();
 
     document.getElementById('testArea').addEventListener('input', function (e) {
