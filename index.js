@@ -133,12 +133,14 @@ background-position: calc(1px * (-${char.x} - ${char.width / 2} + var(--mifont-c
     charWidthRange.setAttribute('max', chars[0].width);
     charWidthRange.setAttribute('value', '5');
     charWidthRange.setAttribute('prop', 'charWidth');
+    createRange(charWidthRange);
 
     const charHeightRange = document.createElement('div');
     charHeightRange.className = 'range';
     charHeightRange.setAttribute('max', chars[0].height);
     charHeightRange.setAttribute('value', '5');
     charHeightRange.setAttribute('prop', 'charHeight');
+    createRange(charHeightRange);
 
     charS.appendChild(charWidthRange);
     charS.appendChild(document.createElement('br'));
@@ -146,9 +148,6 @@ background-position: calc(1px * (-${char.x} - ${char.width / 2} + var(--mifont-c
     charS.appendChild(charHeightRange);
     charS.appendChild(document.createElement('br'));
 
-    // setTimeout(() => {
-        createRanges();
-    // }, 500);
 }
 
 
@@ -192,32 +191,11 @@ function rangeUpdate(prop, val) {
     setMiFontProp(prop, val);
 }
 
-// function createRange(range) {
-//     let prop = range.getAttribute('prop');
-//     let max = range.getAttribute('max');
-//     let val = range.getAttribute('value');
-//     range.innerHTML = `
-//         --mifont-${prop}: 
-//         <input type="range" 
-//            id="${prop}Slider" 
-//            min="0.1" 
-//            max="${max}" 
-//            step="0.1" 
-//            value="${val}"
-//            oninput="rangeUpdate('${prop}',this.value)">
-//         <span id="scaleValue-${prop}">1x</span>
-//         `;
-//     range.classList.remove("range")
-// }
-
-function createRanges() {
-    const ranges = document.getElementsByClassName("range");
-    for (let index = 0; index < ranges.length; index++) {
-        const range = ranges[index];
-        let prop = range.getAttribute('prop');
-        let max = range.getAttribute('max');
-        let val = range.getAttribute('value');
-        range.innerHTML = `
+function createRange(range) {
+    let prop = range.getAttribute('prop');
+    let max = range.getAttribute('max');
+    let val = range.getAttribute('value');
+    range.innerHTML = `
         --mifont-${prop}: 
         <input type="range" 
            id="${prop}Slider" 
@@ -228,7 +206,14 @@ function createRanges() {
            oninput="rangeUpdate('${prop}',this.value)">
         <span id="scaleValue-${prop}">1x</span>
         `;
-        range.classList.remove("range");
+    range.classList.remove("range")
+}
+
+function createRanges() {
+    const ranges = document.getElementsByClassName("range");
+    for (let index = 0; index < ranges.length; index++) {
+        const range = ranges[index];
+        createRange(range);
     };
 }
 
