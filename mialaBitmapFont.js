@@ -1,4 +1,4 @@
-// Set properties of the MiFont as size, right, adaptR and bottom
+// Set properties of the MiFont as size, bottom, charWidth & charHeight
 function setMiFontProp(prop, value) {
     document.documentElement.style.setProperty('--mifont-' + prop, value);
 }

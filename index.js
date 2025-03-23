@@ -100,23 +100,23 @@ function generateCSS(chars, pngDataURL) {
   }*/
 
  .mifont-nochar {
-  font-size: calc(.3px * var(--mifont-charHeight));
+  font-size: calc(.7px * var(--mifont-charHeight) * var(--mifont-size));
 }
 
   .mibmp-font {
-    background-color: black;
+    /*background-color: black;*/
     transform: scale(var(--mifont-size));
     transform-origin: left top;
     /*margin-right: calc(-1em * var(--mifont-right) * .1/var(--mifont-size));
     margin-bottom: calc(-1em * var(--mifont-bottom) * 1.1/var(--mifont-size));*/
     display: inline-block;
-    background-image: url('${pngDataURL}');
     image-rendering: pixelated;
     vertical-align: bottom;
     width: calc(1px * var(--mifont-charWidth));
     height: calc(1px * var(--mifont-charHeight));
     margin-right: calc(-1px * var(--mifont-charWidth) * (1 - var(--mifont-size)));
     margin-bottom: calc(-1px * var(--mifont-charHeight) * (1 - var(--mifont-size)));
+    background-image: url('${pngDataURL}');
 }\n\n`;
 
     chars.forEach(char => {
