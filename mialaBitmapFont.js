@@ -51,7 +51,9 @@ function textToMiFont(text, width=getMiFontProp('charWidth'), maxW=window.innerW
         }
 
         if (c == " " || i === split.lenght) {
-            return wordMiFont;
+            let returned = wordMiFont;
+            wordMiFont = "";
+            return returned;
         }
     }).join('');
 }
