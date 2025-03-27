@@ -16,23 +16,43 @@ function getMiFontProp(prop, element = document.documentElement) {
 }
 
 var lengthMiFont = 0;
-function textToMiFont(text, width=1, maxW=window.innerWidth) {
+var wordMiFont = "";
+function textToMiFont(text, width=getMiFontProp('charWidth'), maxW=window.innerWidth) {
+    
     lengthMiFont = 0;
-    return text.split('').map(c => {
+    wordMiFont = "";
+    let split = text.split('');
+    let i = 0;
+    return split.map(c => {
+        i+=1;
+
+        //TODO: wordMi support
+
         if (c == "\n") {
-            return "<br>";
+            let returned = wordMiFont;
+            lengthMiFont = 0;
+            wordMiFont = "";
+            return returned + "<br>";
         }
+
+
         const code = c.charCodeAt(0);
         let char = currentChars.find(ch => ch.id === code);
         char = char ? `<span class="mibmp-font char-${code}"></span>` : `<span class="mifont-nochar">${c}</span>`;
+        
+
+        wordMiFont += char;
 
         lengthMiFont += width;
         if (lengthMiFont > maxW) {
+            let returned = wordMiFont;
             lengthMiFont = 0;
-            return "<br>" + char;
+            return "<br>" + returned;
         }
 
-        return char;
+        if (c == " " || i === split.lenght) {
+            return wordMiFont;
+        }
     }).join('');
 }
 
