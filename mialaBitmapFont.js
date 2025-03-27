@@ -23,6 +23,7 @@ function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size
     wordMiFont = "";
     let split = text.split('');
     let i = 0;
+    console.log(width);
     return split.map(c => {
         i+=1;
 
@@ -32,6 +33,7 @@ function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size
             let returned = wordMiFont;
             lengthMiFont = 0;
             wordMiFont = "";
+            console.log("Jump",returned);
             return returned + "<br>";
         }
 
@@ -47,12 +49,14 @@ function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size
         if (lengthMiFont > maxW) {
             let returned = wordMiFont;
             lengthMiFont = 0;
+            console.log("Max",returned);
             return "<br>" + returned;
         }
 
         if (c == " " || i === split.lenght) {
             let returned = wordMiFont;
             wordMiFont = "";
+            console.log("Space",lengthMiFont,returned);
             return returned;
         }
     }).join('');
