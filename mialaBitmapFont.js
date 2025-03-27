@@ -17,7 +17,7 @@ function getMiFontProp(prop, element = document.documentElement) {
 
 var lengthMiFont = 0;
 var wordMiFont = "";
-function textToMiFont(text, width=getMiFontProp('charWidth'), maxW=window.innerWidth) {
+function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size'), maxW=window.innerWidth) {
     
     lengthMiFont = 0;
     wordMiFont = "";

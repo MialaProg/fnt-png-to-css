@@ -100,8 +100,10 @@ function generateCSS(chars, pngDataURL) {
   }*/
 
  .mifont-nochar {
-  font-size: calc(.7px * var(--mifont-charHeight) * var(--mifont-size));
-}
+  font-size: calc(.7px * var(--mifont-charHeight) * var(--mifont-size)); 
+  min-width: calc(1px * .6 * var(--mifont-charWidth) * var(--mifont-size));
+  display: inline-block;
+  }
 
   .mibmp-font {
     /*background-color: black;*/
