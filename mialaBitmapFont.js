@@ -11,9 +11,9 @@ function setMiFontProp(prop, value) {
 function getMiFontProp(prop, element = document.documentElement) {
     while (element) {
         let value = false;
-        try{
+        try {
             value = getComputedStyle(element).getPropertyValue('--mifont-' + prop);
-        } catch (error) {}
+        } catch (error) { }
 
         if (value) {
             return value;
@@ -25,8 +25,8 @@ function getMiFontProp(prop, element = document.documentElement) {
 
 var lengthMiFont = 0;
 var wordMiFont = "";
-function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size'), maxW=window.innerWidth) {
-    
+function textToMiFont(text, width = getMiFontProp('charWidth') * getMiFontProp('size'), maxW = window.innerWidth) {
+
     lengthMiFont = 0;
     wordMiFont = "";
     let split = text.split('');
@@ -34,13 +34,13 @@ function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size
     console.log(width);
     // No word-break
     return split.map(c => {
-        i+=1;
+        i += 1;
 
         if (c == "\n") {
             let returned = wordMiFont;
             lengthMiFont = 0;
             wordMiFont = "";
-            console.log("Jump",returned);
+            console.log("Jump", returned);
             return returned + "<br>";
         }
 
@@ -48,7 +48,7 @@ function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size
         const code = c.charCodeAt(0);
         let char = currentChars.find(ch => ch.id === code);
         char = char ? `<span class="mibmp-font char-${code}"></span>` : `<span class="mifont-nochar">${c}</span>`;
-        
+
 
         wordMiFont += char;
 
@@ -57,15 +57,15 @@ function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size
             let returned = wordMiFont;
             wordMiFont = "";
             lengthMiFont = 0;
-            console.log("Max",returned);
+            console.log("Max", returned);
             return "<br>" + returned;
         }
 
-        console.log( i, split.lenght)
+        console.log(i, split.lenght)
         if (c == " " || i === split.lenght) {
             let returned = wordMiFont;
             wordMiFont = "";
-            console.log("Space",lengthMiFont,returned);
+            console.log("Space", lengthMiFont, returned);
             return returned;
         }
     }).join('');
@@ -74,26 +74,7 @@ function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size
 function convertMiFont(element, parent = undefined) {
 
     try {
-        // Observe when police size changes
-        if (element && element.nodeType === Node.ELEMENT_NODE) {
-            const observer = new MutationObserver(mutations => {
-                mutations.forEach(mutation => {
-                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                        const newSize = getComputedStyle(element).getPropertyValue('--mifont-size');
-                        const oldSize = mutation.oldValue && mutation.oldValue.match(/--mifont-size:\s*([^;]+)/)?.[1];
-                        if (newSize !== oldSize) {
-                            resizeMiFont(element);
-                        }
-                    }
-                });
-            });
 
-            observer.observe(element, {
-                attributes: true,
-                attributeFilter: ['style'],
-                attributeOldValue: true
-            });
-        }
 
         // Convert to MiFont
         const size = parseFloat(getMiFontProp('size', element));
@@ -113,6 +94,26 @@ function convertMiFont(element, parent = undefined) {
             parent.replaceChild(div, element);
 
         } else if (element.nodeType === Node.ELEMENT_NODE) {
+
+            // Observe when police size changes
+            const observer = new MutationObserver(mutations => {
+                mutations.forEach(mutation => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                        const newSize = getComputedStyle(element).getPropertyValue('--mifont-size');
+                        const oldSize = mutation.oldValue && mutation.oldValue.match(/--mifont-size:\s*([^;]+)/)?.[1];
+                        if (newSize !== oldSize) {
+                            resizeMiFont(element);
+                        }
+                    }
+                });
+            });
+
+            observer.observe(element, {
+                attributes: true,
+                attributeFilter: ['style'],
+                attributeOldValue: true
+            });
+
             element.childNodes.forEach(child => convertMiFont(child, element));
         }
     } catch (error) {
@@ -134,7 +135,7 @@ function restoreFromMiFont(element) {
 
 }
 
-function resizeMiFont(item = document){
+function resizeMiFont(item = document) {
     const elements = item.querySelectorAll('[beforeMiFont]');
     elements.forEach(element => {
         let parent = element.parentNode;
