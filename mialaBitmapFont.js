@@ -1,12 +1,18 @@
 // Set properties of the MiFont as size, bottom, charWidth & charHeight
 function setMiFontProp(prop, value) {
     document.documentElement.style.setProperty('--mifont-' + prop, value);
+
+    if (prop === "size") {
+        convertMiFonts();
+    }
 }
 
 // Get properties of the MiFont as size, right, adaptR and bottom
 function getMiFontProp(prop, element = document.documentElement) {
-    while (element && element.style) {
-        const value = element.style.getPropertyValue('--mifont-' + prop);
+    while (element) {
+        const value = element === document.documentElement
+            ? getComputedStyle(element).getPropertyValue('--mifont-' + prop)
+            : element.style?.getPropertyValue('--mifont-' + prop);
         if (value) {
             return value;
         }
@@ -65,10 +71,30 @@ function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size
 function convertMiFont(element, parent = undefined) {
 
     try {
+        // Observe when police size changes
+        const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                const newSize = getComputedStyle(element).getPropertyValue('--mifont-size');
+                const oldSize = mutation.oldValue && mutation.oldValue.match(/--mifont-size:\s*([^;]+)/)?.[1];
+                if (newSize !== oldSize) {
+                resizeMiFont(element);
+                }
+            }
+            });
+        });
+
+        observer.observe(element, {
+            attributes: true,
+            attributeFilter: ['style'],
+            attributeOldValue: true
+        });
+
+        // Convert to MiFont
         const size = parseFloat(getMiFontProp('size', element));
         let width = parseFloat(getMiFontProp('charWidth', element));
         if (isNaN(width) || isNaN(size)) {
-            width = 1;
+            width = undefined;
         } else {
             width *= size;
         }
@@ -89,3 +115,30 @@ function convertMiFont(element, parent = undefined) {
         console.log(error);
     }
 }
+
+function restoreFromMiFont(element, parent = undefined) {
+
+    if (element.nodeType === Node.ELEMENT_NODE) {
+        if (element.hasAttribute('beforeMiFont')) {
+            const textNode = document.createTextNode(element.getAttribute('beforeMiFont'));
+            parent.replaceChild(textNode, element);
+        } else {
+            Array.from(element.childNodes).forEach(child => restoreFromMiFont(child, element));
+        }
+    }
+
+}
+
+function resizeMiFont(item = document){
+    const elements = item.querySelectorAll('[beforeMiFont]');
+    elements.forEach(element => {
+        restoreFromMiFont(element);
+        convertMiFont(element);
+    });
+}
+
+
+window.addEventListener('resize', () => {
+    resizeMiFont();
+});
+
