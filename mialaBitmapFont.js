@@ -3,7 +3,7 @@ function setMiFontProp(prop, value) {
     document.documentElement.style.setProperty('--mifont-' + prop, value);
 
     if (prop === "size") {
-        convertMiFonts();
+        convertMiFont();
     }
 }
 
