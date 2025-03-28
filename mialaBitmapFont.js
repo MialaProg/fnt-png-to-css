@@ -10,8 +10,11 @@ function setMiFontProp(prop, value) {
 // Get properties of the MiFont as size, right, adaptR and bottom
 function getMiFontProp(prop, element = document.documentElement) {
     while (element) {
-        value = getComputedStyle(element).getPropertyValue('--mifont-' + prop);
-        
+        let value = false;
+        try{
+            value = getComputedStyle(element).getPropertyValue('--mifont-' + prop);
+        } catch (error) {}
+
         if (value) {
             return value;
         }
