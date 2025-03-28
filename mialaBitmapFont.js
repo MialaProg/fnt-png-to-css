@@ -32,10 +32,9 @@ function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size
     let split = text.split('');
     let i = 0;
     console.log(width);
+    // No word-break
     return split.map(c => {
         i+=1;
-
-        //TODO: wordMi support
 
         if (c == "\n") {
             let returned = wordMiFont;
@@ -56,6 +55,7 @@ function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size
         lengthMiFont += width;
         if (lengthMiFont > maxW) {
             let returned = wordMiFont;
+            wordMiFont = "";
             lengthMiFont = 0;
             console.log("Max",returned);
             return "<br>" + returned;
@@ -75,23 +75,25 @@ function convertMiFont(element, parent = undefined) {
 
     try {
         // Observe when police size changes
-        const observer = new MutationObserver(mutations => {
-            mutations.forEach(mutation => {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                const newSize = getComputedStyle(element).getPropertyValue('--mifont-size');
-                const oldSize = mutation.oldValue && mutation.oldValue.match(/--mifont-size:\s*([^;]+)/)?.[1];
-                if (newSize !== oldSize) {
-                resizeMiFont(element);
-                }
-            }
+        if (element && element.nodeType === Node.ELEMENT_NODE) {
+            const observer = new MutationObserver(mutations => {
+                mutations.forEach(mutation => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                        const newSize = getComputedStyle(element).getPropertyValue('--mifont-size');
+                        const oldSize = mutation.oldValue && mutation.oldValue.match(/--mifont-size:\s*([^;]+)/)?.[1];
+                        if (newSize !== oldSize) {
+                            resizeMiFont(element);
+                        }
+                    }
+                });
             });
-        });
 
-        observer.observe(element, {
-            attributes: true,
-            attributeFilter: ['style'],
-            attributeOldValue: true
-        });
+            observer.observe(element, {
+                attributes: true,
+                attributeFilter: ['style'],
+                attributeOldValue: true
+            });
+        }
 
         // Convert to MiFont
         const size = parseFloat(getMiFontProp('size', element));
