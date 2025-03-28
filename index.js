@@ -39,7 +39,7 @@ async function step2() {
 
     if (!fntFile || !pngFile) {
         alert("Veuillez sélectionner les deux fichiers. Please select both files.");
-        disable([1, 0, 0]);
+        disable([0, 1, 1]);
         return;
     }
 
