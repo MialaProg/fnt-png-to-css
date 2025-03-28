@@ -61,6 +61,7 @@ function textToMiFont(text, width=getMiFontProp('charWidth')*getMiFontProp('size
             return "<br>" + returned;
         }
 
+        console.log( i, split.lenght)
         if (c == " " || i === split.lenght) {
             let returned = wordMiFont;
             wordMiFont = "";
