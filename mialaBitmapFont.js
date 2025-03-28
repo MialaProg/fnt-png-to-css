@@ -1,9 +1,11 @@
+var __MiFontElements = {};
+
 // Set properties of the MiFont as size, bottom, charWidth & charHeight
-function setMiFontProp(prop, value) {
-    document.documentElement.style.setProperty('--mifont-' + prop, value);
+function setMiFontProp(prop, value, element=document.documentElement) {
+    element.style.setProperty('--mifont-' + prop, value);
 
     if (prop === "size") {
-        convertMiFont();
+        resizeMiFont(element);
     }
 }
 
@@ -74,8 +76,6 @@ function textToMiFont(text, width = getMiFontProp('charWidth') * getMiFontProp('
 function convertMiFont(element, parent = undefined) {
 
     try {
-
-
         // Convert to MiFont
         const size = parseFloat(getMiFontProp('size', element));
         let width = parseFloat(getMiFontProp('charWidth', element));
@@ -94,30 +94,11 @@ function convertMiFont(element, parent = undefined) {
             parent.replaceChild(div, element);
 
         } else if (element.nodeType === Node.ELEMENT_NODE) {
-
-            // Observe when police size changes
-            const observer = new MutationObserver(mutations => {
-                mutations.forEach(mutation => {
-                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                        const newSize = getComputedStyle(element).getPropertyValue('--mifont-size');
-                        const oldSize = mutation.oldValue && mutation.oldValue.match(/--mifont-size:\s*([^;]+)/)?.[1];
-                        if (newSize !== oldSize) {
-                            resizeMiFont(element);
-                        }
-                    }
-                });
-            });
-
-            observer.observe(element, {
-                attributes: true,
-                attributeFilter: ['style'],
-                attributeOldValue: true
-            });
-
+            // Convert children
             element.childNodes.forEach(child => convertMiFont(child, element));
         }
     } catch (error) {
-        console.log(element);
+        console.log('MiFontERR', element);
         console.log(error);
     }
 }
