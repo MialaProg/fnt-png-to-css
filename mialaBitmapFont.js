@@ -64,8 +64,8 @@ function textToMiFont(text, width = getMiFontProp('charWidth') * getMiFontProp('
             return "<br>" + returned;
         }
 
-        console.log(i, splited.lenght, lengthMiFont, maxW);
-        if (c == " " || i === splited.lenght) {
+        console.log(i, splited.length, lengthMiFont, maxW);
+        if (c == " " || i === splited.length) {
             let returned = wordMiFont;
             wordMiFont = "";
             console.log("Space", lengthMiFont, returned);
