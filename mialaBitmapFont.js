@@ -31,11 +31,11 @@ function textToMiFont(text, width = getMiFontProp('charWidth') * getMiFontProp('
 
     lengthMiFont = 0;
     wordMiFont = "";
-    let split = text.split('');
+    let splited = text.split('');
     let i = 0;
     console.log(width);
     // No word-break
-    return split.map(c => {
+    return splited.map(c => {
         i += 1;
 
         if (c == "\n") {
@@ -64,8 +64,8 @@ function textToMiFont(text, width = getMiFontProp('charWidth') * getMiFontProp('
             return "<br>" + returned;
         }
 
-        console.log(i, split.lenght)
-        if (c == " " || i === split.lenght) {
+        console.log(i, splited.lenght, lengthMiFont, maxW);
+        if (c == " " || i === splited.lenght) {
             let returned = wordMiFont;
             wordMiFont = "";
             console.log("Space", lengthMiFont, returned);
