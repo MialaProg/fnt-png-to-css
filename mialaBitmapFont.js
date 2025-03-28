@@ -119,14 +119,14 @@ function convertMiFont(element, parent = undefined) {
     }
 }
 
-function restoreFromMiFont(element, parent = undefined) {
+function restoreFromMiFont(element) {
 
     if (element.nodeType === Node.ELEMENT_NODE) {
         if (element.hasAttribute('beforeMiFont')) {
             const textNode = document.createTextNode(element.getAttribute('beforeMiFont'));
-            parent.replaceChild(textNode, element);
+            element.parentNode.replaceChild(textNode, element);
         } else {
-            Array.from(element.childNodes).forEach(child => restoreFromMiFont(child, element));
+            Array.from(element.childNodes).forEach(child => restoreFromMiFont(child));
         }
     }
 
@@ -135,8 +135,9 @@ function restoreFromMiFont(element, parent = undefined) {
 function resizeMiFont(item = document){
     const elements = item.querySelectorAll('[beforeMiFont]');
     elements.forEach(element => {
+        let parent = element.parentNode;
         restoreFromMiFont(element);
-        convertMiFont(element);
+        convertMiFont(parent);
     });
 }
 
