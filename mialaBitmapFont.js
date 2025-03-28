@@ -49,12 +49,13 @@ function textToMiFont(text, width = getMiFontProp('charWidth') * getMiFontProp('
 
         const code = c.charCodeAt(0);
         let char = currentChars.find(ch => ch.id === code);
+        
+        lengthMiFont += char ? width : .6 * width;
         char = char ? `<span class="mibmp-font char-${code}"></span>` : `<span class="mifont-nochar">${c}</span>`;
 
 
         wordMiFont += char;
 
-        lengthMiFont += width;
         if (lengthMiFont > maxW) {
             let returned = wordMiFont;
             wordMiFont = "";
