@@ -59,7 +59,7 @@ function textToMiFont(text, width = getMiFontProp('charWidth') * getMiFontProp('
         if (lengthMiFont > maxW) {
             let returned = wordMiFont;
             wordMiFont = "";
-            lengthMiFont = returned*width;
+            lengthMiFont = returned.length  *width;
             console.log("Max", returned);
             return "<br>" + returned;
         }
