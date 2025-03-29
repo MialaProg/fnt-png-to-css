@@ -185,7 +185,7 @@ function downloadJS() {
         .then(response => response.text())
         .then(text => {
             let updatedText = text + "var currentChars = " + JSON.stringify(currentChars) + ";\n";
-            updatedText += "currentChars = JSON.parse(currentChars);\n";
+            // updatedText += "currentChars = JSON.parse(currentChars);\n";
 
             const blob = new Blob([updatedText], { type: 'application/javascript' });
             const link = document.createElement('a');
