@@ -182,8 +182,12 @@ function downloadCSS() {
 
 function downloadJS() {
     fetch('./mialaBitmapFont.js')
-        .then(response => response.blob())
-        .then(blob => {
+        .then(response => response.text())
+        .then(text => {
+            let updatedText = text + "var currentChars = " + JSON.stringify(currentChars) + ";\n";
+            updatedText += "currentChars = JSON.parse(currentChars);\n";
+
+            const blob = new Blob([updatedText], { type: 'application/javascript' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = 'mifont.js';
