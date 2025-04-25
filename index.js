@@ -136,18 +136,24 @@ background-position: calc(1px * (-${char.x} - ${char.width / 2} + var(--mifont-c
     generatedCSS = css; // Stocke le CSS pour le téléchargement
 
     // Create ranges for charWidth and charHeight
+    const indexOfMaxWidth = chars.reduce((maxIndex, currentChar, currentIndex, array) => {
+        return currentChar.width > array[maxIndex].width ? currentIndex : maxIndex;
+    }, 0);
     const charS = document.getElementById("charS");
     const charWidthRange = document.createElement('div');
     charWidthRange.className = 'range';
-    charWidthRange.setAttribute('max', chars[0].width);
-    charWidthRange.setAttribute('value', chars[0].width);
+    charWidthRange.setAttribute('max', chars[indexOfMaxWidth].width);
+    charWidthRange.setAttribute('value', chars[indexOfMaxWidth].width);
     charWidthRange.setAttribute('prop', 'charWidth');
     createRange(charWidthRange);
 
+    const indexOfMaxHeight = chars.reduce((maxIndex, currentChar, currentIndex, array) => {
+        return currentChar.height > array[maxIndex].height ? currentIndex : maxIndex;
+    }, 0);
     const charHeightRange = document.createElement('div');
     charHeightRange.className = 'range';
-    charHeightRange.setAttribute('max', chars[0].height);
-    charHeightRange.setAttribute('value', chars[0].height);
+    charHeightRange.setAttribute('max', chars[indexOfMaxHeight].height);
+    charHeightRange.setAttribute('value', chars[indexOfMaxHeight].height);
     charHeightRange.setAttribute('prop', 'charHeight');
     createRange(charHeightRange);
 
